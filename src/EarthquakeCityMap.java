@@ -1,5 +1,6 @@
 
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,30 +186,32 @@ public class EarthquakeCityMap extends PApplet {
 	 * */
 	private void printQuakes() 
 	{
-		// TODO: Implement this method
-		// One (inefficient but correct) approach is to:
-		//   Loop over all of the countries, e.g. using 
-		//        for (Marker cm : countryMarkers) { ... }
-		//        
-		//      Inside the loop, first initialize a quake counter.
-		//      Then loop through all of the earthquake
-		//      markers and check to see whether (1) that marker is on land
-		//     	and (2) if it is on land, that its country property matches 
-		//      the name property of the country marker.   If so, increment
-		//      the country's counter.
-		
-		// Here is some code you will find useful:
-		// 
-		//  * To get the name of a country from a country marker in variable cm, use:
-		//     String name = (String)cm.getProperty("name");
-		//  * If you have a reference to a Marker m, but you know the underlying object
-		//    is an EarthquakeMarker, you can cast it:
-		//       EarthquakeMarker em = (EarthquakeMarker)m;
-		//    Then em can access the methods of the EarthquakeMarker class 
-		//       (e.g. isOnLand)
-		//  * If you know your Marker, m, is a LandQuakeMarker, then it has a "country" 
-		//      property set.  You can get the country with:
-		//        String country = (String)m.getProperty("country");
+		HashMap<String, Integer> quakeCount = new HashMap<String, Integer>();
+		for (Marker quake : quakeMarkers) {
+			if (((EarthquakeMarker)quake).isOnLand()) {
+				String country = ((LandQuakeMarker)quake).getCountry();
+				if (quakeCount.containsKey(country)) {
+					quakeCount.put(country, quakeCount.get(country)+1);
+				}
+				else {
+					quakeCount.put(country, 1);
+				}
+			}
+			else {
+				if (quakeCount.containsKey("OCEAN QUAKES")) {
+					quakeCount.put("OCEAN QUAKES", quakeCount.get("OCEAN QUAKES")+1);
+				}
+				else {
+					quakeCount.put("OCEAN QUAKES", 1);
+				}
+			}
+		}
+		for (String countryKey : quakeCount.keySet()) {
+			if (!countryKey.equals("OCEAN QUAKES")) {
+				System.out.println(countryKey + ": " + quakeCount.get(countryKey));
+			}
+		}
+		System.out.println("OCEAN QUAKES: " + quakeCount.get("OCEAN QUAKES"));
 		
 		
 	}
