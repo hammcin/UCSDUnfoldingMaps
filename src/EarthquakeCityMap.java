@@ -147,6 +147,7 @@ public class EarthquakeCityMap extends PApplet {
 		text("Shallow", 75, 200);
 		text("Intermediate", 75, 225);
 		text("Deep", 75, 250);
+		text("Past hour", 75, 275);
 		
 		// City marker
 		fill(color(255, 0, 0));
@@ -168,6 +169,16 @@ public class EarthquakeCityMap extends PApplet {
 		ellipse(50,225,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
 		fill(color(255,0,0));
 		ellipse(50,250,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		
+		// Age of earthquake
+		fill(color(255,255,255));
+		ellipse(50,275,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		stroke(0,0,0);
+		strokeWeight(2);
+		line((50-(2*CityMarker.TRI_SIZE)),(275-(2*CityMarker.TRI_SIZE)),
+				(50+(2*CityMarker.TRI_SIZE)),(275+(2*CityMarker.TRI_SIZE)));
+		line((50+(2*CityMarker.TRI_SIZE)),(275-(2*CityMarker.TRI_SIZE)),
+				(50-(2*CityMarker.TRI_SIZE)),(275+(2*CityMarker.TRI_SIZE)));
 	}
 
 	

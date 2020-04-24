@@ -61,7 +61,13 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		// call abstract method implemented in child class to draw marker shape
 		drawEarthquake(pg, x, y);
 		
-		// OPTIONAL TODO: draw X over marker if within past day		
+		// Draw X over marker if within past day
+		pg.stroke(0,0,0);
+		pg.strokeWeight(2);
+		if (getAge().equals("Past Hour") || getAge().equals("Past Day")) {
+			pg.line((x-getRadius()),(y-getRadius()),(x+getRadius()),(y+getRadius()));
+			pg.line((x+getRadius()),(y-getRadius()),(x-getRadius()),(y+getRadius()));
+		}
 		
 		// reset to previous styling
 		pg.popStyle();
@@ -105,6 +111,10 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	
 	public float getRadius() {
 		return Float.parseFloat(getProperty("radius").toString());
+	}
+	
+	public String getAge() {
+		return (String) getProperty("age");
 	}
 	
 	public boolean isOnLand()
