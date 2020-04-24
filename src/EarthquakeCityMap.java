@@ -142,12 +142,22 @@ public class EarthquakeCityMap extends PApplet {
 		textSize(12);
 		text("Earthquake Key", 50, 75);
 		text("City Marker", 75, 100);
+		text("Land Quake", 75, 125);
+		text("Ocean Quake", 75, 150);
+		text("Size ~ Magnitude", 50, 175);
 		
 		// City marker
 		fill(color(255, 0, 0));
 		triangle(50, (100-CityMarker.TRI_SIZE),
 				(50-CityMarker.TRI_SIZE), (100+CityMarker.TRI_SIZE),
 				(50+CityMarker.TRI_SIZE), (100+CityMarker.TRI_SIZE));
+		
+		fill(color(255,255,255));
+		// Land quake marker
+		ellipse(50,125,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		// Ocean quake marker
+		rect((float)(50-(2*CityMarker.TRI_SIZE)/2.0),(float)(150-(2*CityMarker.TRI_SIZE)/2.0),
+				(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
 	}
 
 	
