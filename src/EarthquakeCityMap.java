@@ -131,7 +131,6 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	// helper method to draw key in GUI
-	// TODO: Update this method as appropriate
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
 		fill(200);
@@ -145,6 +144,9 @@ public class EarthquakeCityMap extends PApplet {
 		text("Land Quake", 75, 125);
 		text("Ocean Quake", 75, 150);
 		text("Size ~ Magnitude", 50, 175);
+		text("Shallow", 75, 200);
+		text("Intermediate", 75, 225);
+		text("Deep", 75, 250);
 		
 		// City marker
 		fill(color(255, 0, 0));
@@ -158,6 +160,14 @@ public class EarthquakeCityMap extends PApplet {
 		// Ocean quake marker
 		rect((float)(50-(2*CityMarker.TRI_SIZE)/2.0),(float)(150-(2*CityMarker.TRI_SIZE)/2.0),
 				(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		
+		// Earthquake depth
+		fill(color(255,255,0));
+		ellipse(50,200,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		fill(color(0,0,255));
+		ellipse(50,225,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
+		fill(color(255,0,0));
+		ellipse(50,250,(2*CityMarker.TRI_SIZE),(2*CityMarker.TRI_SIZE));
 	}
 
 	

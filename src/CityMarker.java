@@ -15,7 +15,6 @@ import processing.core.PGraphics;
 public class CityMarker extends SimplePointMarker {
 	
 	// The size of the triangle marker
-	// It's a good idea to use this variable in your draw method
 	public static final int TRI_SIZE = 5;  
 	
 	public CityMarker(Location location) {
@@ -44,8 +43,7 @@ public class CityMarker extends SimplePointMarker {
 		pg.popStyle();
 	}
 	
-	/* Local getters for some city properties.  You might not need these 
-	 * in module 4. 	 */
+	/* Local getters for some city properties. 	 */
 	public String getCity()
 	{
 		return getStringProperty("name");
