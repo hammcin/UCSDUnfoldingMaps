@@ -85,13 +85,10 @@ public class EarthquakeCityMap extends PApplet {
 	    map.addMarkers(markers);
 	}
 		
-	/* createMarker: A suggested helper method that takes in an earthquake 
+	/* createMarker: A helper method that takes in an earthquake 
 	 * feature and returns a SimplePointMarker for that earthquake
 	 * 
-	 * In step 3 You can use this method as-is.  Call it from a loop in the 
-	 * setup method.  
-	 * 
-	 * TODO (Step 4): Add code to this method so that it adds the proper 
+	 * This method adds the proper 
 	 * styling to each marker based on the magnitude of the earthquake.  
 	*/
 	private SimplePointMarker createMarker(PointFeature feature)
@@ -107,18 +104,33 @@ public class EarthquakeCityMap extends PApplet {
 		Object magObj = feature.getProperty("magnitude");
 		float mag = Float.parseFloat(magObj.toString());
 		
-		// Here is an example of how to use Processing's color method to generate 
-	    // an int that represents the color yellow.  
+		// Use Processing's color method to generate 
+	    // ints that represent the colors yellow, red, and blue.  
 	    int yellow = color(255, 255, 0);
+	    int red = color(255, 0, 0);
+	    int blue = color(0, 0, 255);
 		
-		// TODO (Step 4): Add code below to style the marker's size and color 
+	    // Style the marker's size and color 
 	    // according to the magnitude of the earthquake.  
-	    // Don't forget about the constants THRESHOLD_MODERATE and 
+	    // Uses the constants THRESHOLD_MODERATE and 
 	    // THRESHOLD_LIGHT, which are declared above.
 	    // Rather than comparing the magnitude to a number directly, compare 
-	    // the magnitude to these variables (and change their value in the code 
-	    // above if you want to change what you mean by "moderate" and "light")
-	    
+	    // the magnitude to these variables (can change their value in the code 
+	    // above to change what is meant by "moderate" and "light")
+	    if (mag < THRESHOLD_LIGHT) {
+	    	marker.setColor(blue);
+	    	marker.setRadius(5);
+	    }
+	    if (mag >= THRESHOLD_LIGHT) {
+	    	if (mag < THRESHOLD_MODERATE) {
+	    		marker.setColor(yellow);
+	    		marker.setRadius(10);
+	    	}
+	    }
+	    if (mag >= THRESHOLD_MODERATE) {
+	    	marker.setColor(red);
+	    	marker.setRadius(15);
+	    }
 	    
 	    // Finally return the marker
 	    return marker;
