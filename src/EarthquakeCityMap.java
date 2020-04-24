@@ -24,7 +24,7 @@ import parsing.ParseFeed;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Hamadi McIntosh
  * Date: July 17, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
@@ -66,18 +66,20 @@ public class EarthquakeCityMap extends PApplet {
 	    map.zoomToLevel(2);
 	    MapUtils.createDefaultEventDispatcher(this, map);	
 			
-	    // The List you will populate with new SimplePointMarkers
+	    // List populated with new SimplePointMarkers
 	    List<Marker> markers = new ArrayList<Marker>();
 
 	    //Use provided parser to collect properties for each earthquake
 	    //PointFeatures have a getLocation method
 	    List<PointFeature> earthquakes = ParseFeed.parseEarthquake(this, earthquakesURL);
 	    
-	    //TODO (Step 3): Add a loop here that calls createMarker (see below) 
+	    //Loop here calls createMarker (see below) 
 	    // to create a new SimplePointMarker for each PointFeature in 
-	    // earthquakes.  Then add each new SimplePointMarker to the 
+	    // earthquakes.  Then adds each new SimplePointMarker to the 
 	    // List markers (so that it will be added to the map in the line below)
-	    
+	    for (PointFeature eq : earthquakes) {
+	    	markers.add(createMarker(eq));
+	    }
 	    
 	    // Add the markers to the map so that they are displayed
 	    map.addMarkers(markers);
@@ -87,7 +89,7 @@ public class EarthquakeCityMap extends PApplet {
 	 * feature and returns a SimplePointMarker for that earthquake
 	 * 
 	 * In step 3 You can use this method as-is.  Call it from a loop in the 
-	 * setp method.  
+	 * setup method.  
 	 * 
 	 * TODO (Step 4): Add code to this method so that it adds the proper 
 	 * styling to each marker based on the magnitude of the earthquake.  
