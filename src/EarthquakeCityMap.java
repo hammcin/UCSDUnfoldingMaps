@@ -166,9 +166,69 @@ public class EarthquakeCityMap extends PApplet {
 	@Override
 	public void mouseClicked()
 	{
-		// TODO: Implement this method
-		// Hint: You probably want a helper method or two to keep this code
-		// from getting too long/disorganized
+		if (lastClicked == null) {
+			
+			selectMarkerIfClicked(quakeMarkers);
+			selectMarkerIfClicked(cityMarkers);
+			
+			if (lastClicked != null && lastClicked.getClass() == OceanQuakeMarker.class) {
+				((OceanQuakeMarker) lastClicked).loadCityMarkers(cityMarkers, map);
+			}
+			
+			selectMarkersInThreatRadius();
+			
+		}
+		else {
+			lastClicked = null;
+			unhideMarkers();
+			
+			unClick(quakeMarkers);
+			unClick(cityMarkers);
+		}
+	}
+	
+	private void unClick(List<Marker> markers) {
+		for (Marker m : markers) {
+			((CommonMarker)m).setClicked(false);
+		}
+	}
+	
+	private void selectMarkersInThreatRadius() {
+		if (!(lastClicked == null)) {
+			if (lastClicked.getClass() == CityMarker.class) {
+				for (Marker m : quakeMarkers) {
+					if (m.getDistanceTo(lastClicked.getLocation()) <=
+							((EarthquakeMarker)m).threatCircle()) {
+						m.setHidden(false);
+					}
+				}
+			}
+			else {
+				for (Marker m : cityMarkers) {
+					if (m.getDistanceTo(lastClicked.getLocation()) <=
+							((EarthquakeMarker)lastClicked).threatCircle()) {
+						m.setHidden(false);
+					}
+				}
+			}
+		}
+		else {
+			unhideMarkers();
+		}
+	}
+	
+	private void selectMarkerIfClicked(List<Marker> markers) {
+		for (Marker m : markers) {
+			if (m.isInside(map, mouseX, mouseY) && (lastClicked == null)) {
+				lastClicked = (CommonMarker) m;
+				m.setHidden(false);
+				((CommonMarker)m).setClicked(true);
+			}
+			else {
+				m.setHidden(true);
+				((CommonMarker)m).setClicked(false);
+			}
+		}
 	}
 	
 	
