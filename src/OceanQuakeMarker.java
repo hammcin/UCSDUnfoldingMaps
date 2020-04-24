@@ -19,21 +19,21 @@ public class OceanQuakeMarker extends EarthquakeMarker {
 	}
 	
 
+	/** Draw the earthquake as a square */
 	@Override
 	public void drawEarthquake(PGraphics pg, float x, float y) {
 		// Drawing a centered square for Ocean earthquakes
 		// DO NOT set the fill color.  That will be set in the EarthquakeMarker
 		// class to indicate the depth of the earthquake.
 		// Simply draw a centered square.
-				
+						
 		// Notice the radius variable in the EarthquakeMarker class
 		// and how it is set in the EarthquakeMarker constructor
-				
-		pg.rect((x-(getRadius()/((float)2.0))), (y-(getRadius()/((float)2.0))),
+						
+		pg.rect((x-(getRadius()/(2.0f))), (y-(getRadius()/(2.0f))),
 				getRadius(), getRadius());
 	}
 	
-
 
 	
 
