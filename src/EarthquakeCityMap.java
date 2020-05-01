@@ -1,7 +1,9 @@
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -27,7 +29,7 @@ import processing.core.PApplet;
 public class EarthquakeCityMap extends PApplet {
 	
 	// We will use member variables, instead of local variables, to store the data
-	// that the setup and draw methods will need to access (as well as other methods)
+	// that the setUp and draw methods will need to access (as well as other methods)
 	// You will use many of these variables, but the only one you should need to add
 	// code to modify is countryQuakes, where you will store the number of earthquakes
 	// per country.
@@ -41,6 +43,8 @@ public class EarthquakeCityMap extends PApplet {
 	/** This is where to find the local tiles, for working without an Internet connection */
 	public static String mbTilesString = "blankLight-1-3.mbtiles";
 	
+	
+
 	//feed with magnitude 2.5+ Earthquakes
 	private String earthquakesURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
 	
@@ -79,6 +83,14 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		MapUtils.createDefaultEventDispatcher(this, map);
 		
+		// FOR TESTING: Set earthquakesURL to be one of the testing files by uncommenting
+		// one of the lines below.  This will work whether you are online or offline
+		//earthquakesURL = "test1.atom";
+		earthquakesURL = "test2.atom";
+		
+		// Uncomment this line to take the quiz
+		//earthquakesURL = "quiz2.atom";
+		
 		
 		// (2) Reading in earthquake data and geometric properties
 	    //     STEP 1: load country features and markers
@@ -111,12 +123,16 @@ public class EarthquakeCityMap extends PApplet {
 
 	    // could be used for debugging
 	    printQuakes();
+	    
+	    sortAndPrint(20);
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
 	    //           for their geometric properties
 	    map.addMarkers(quakeMarkers);
 	    map.addMarkers(cityMarkers);
+	    
+	    OceanQuakeMarker.loadCityMarkers(cityMarkers, map);
 	    
 	}  // End setup
 	
@@ -126,6 +142,21 @@ public class EarthquakeCityMap extends PApplet {
 		map.draw();
 		addKey();
 		
+	}
+	
+	
+	private void sortAndPrint(int numToPrint) {
+		List<EarthquakeMarker> quakeList = new ArrayList<EarthquakeMarker>();
+		for (Marker quake : quakeMarkers) {
+			quakeList.add((EarthquakeMarker) quake);
+		}
+		Collections.sort(quakeList);
+		if (numToPrint > quakeList.size()) {
+			numToPrint = quakeList.size();
+		}
+		for (int i=0;i<numToPrint;i++) {
+			System.out.println(quakeList.get(i));;
+		}
 	}
 	
 	/** Event handler that gets called automatically when the 
@@ -142,6 +173,7 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
+		//loop();
 	}
 	
 	// If there is a marker under the cursor, and lastSelected is null 
@@ -170,10 +202,6 @@ public class EarthquakeCityMap extends PApplet {
 			
 			selectMarkerIfClicked(quakeMarkers);
 			selectMarkerIfClicked(cityMarkers);
-			
-			if (lastClicked != null && lastClicked.getClass() == OceanQuakeMarker.class) {
-				((OceanQuakeMarker) lastClicked).loadCityMarkers(cityMarkers, map);
-			}
 			
 			selectMarkersInThreatRadius();
 			
@@ -230,7 +258,6 @@ public class EarthquakeCityMap extends PApplet {
 			}
 		}
 	}
-	
 	
 	// loop over and unhide all markers
 	private void unhideMarkers() {

@@ -1,4 +1,5 @@
 
+
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -16,12 +17,12 @@ import processing.core.PGraphics;
  */
 public class OceanQuakeMarker extends EarthquakeMarker {
 	
-	private boolean isLoaded;
+	public static boolean isLoaded;
 	
-	private UnfoldingMap map;
+	public static UnfoldingMap map;
 	
 	// Markers for each city
-	private List<Marker> cityMarkers;
+	public static List<Marker> cityMarkers;
 	
 	public OceanQuakeMarker(PointFeature quake) {
 		super(quake);
@@ -71,12 +72,14 @@ public class OceanQuakeMarker extends EarthquakeMarker {
 		pg.popStyle();
 	}
 	
-	void loadCityMarkers(List<Marker> cityMarkerList,
+	public static void loadCityMarkers(List<Marker> cityMarkerList,
 			UnfoldingMap cityMap) {
 		isLoaded = true;
 		cityMarkers = cityMarkerList;
 		map = cityMap;
 	}
+	
+
 	
 
 }

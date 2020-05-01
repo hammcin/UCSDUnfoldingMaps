@@ -1,7 +1,14 @@
 
 
+
+import java.util.List;
+
+import de.fhpotsdam.unfolding.UnfoldingMap;
+import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
+import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.utils.ScreenPosition;
 import processing.core.PGraphics;
 
 /** Implements a common marker for cities and earthquakes on an earthquake map
@@ -34,6 +41,7 @@ public abstract class CommonMarker extends SimplePointMarker {
 	}
 	
 	// Common piece of drawing method for markers; 
+	// YOU WILL IMPLEMENT. 
 	// Note that you should implement this by making calls 
 	// drawMarker and showTitle, which are abstract methods 
 	// implemented in subclasses
@@ -42,7 +50,7 @@ public abstract class CommonMarker extends SimplePointMarker {
 		if (!hidden) {
 			drawMarker(pg, x, y);
 			if (selected) {
-				showTitle(pg, x, y);  // You will implement this in the subclasses
+				showTitle(pg, x, y);
 			}
 		}
 	}
