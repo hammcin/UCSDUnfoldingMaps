@@ -38,7 +38,7 @@ public class EarthquakeCityMap extends PApplet {
 	private static final long serialVersionUID = 1L;
 
 	// IF YOU ARE WORKING OFFILINE, change the value of this variable to true
-	private static final boolean offline = true;
+	private static final boolean offline = false;
 	
 	/** This is where to find the local tiles, for working without an Internet connection */
 	public static String mbTilesString = "blankLight-1-3.mbtiles";
@@ -69,6 +69,8 @@ public class EarthquakeCityMap extends PApplet {
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
 	
+	private boolean cityClicked;
+	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
 		size(900, 700, OPENGL);
@@ -86,7 +88,7 @@ public class EarthquakeCityMap extends PApplet {
 		// FOR TESTING: Set earthquakesURL to be one of the testing files by uncommenting
 		// one of the lines below.  This will work whether you are online or offline
 		//earthquakesURL = "test1.atom";
-		earthquakesURL = "test2.atom";
+		//earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
 		//earthquakesURL = "quiz2.atom";
@@ -142,6 +144,9 @@ public class EarthquakeCityMap extends PApplet {
 		map.draw();
 		addKey();
 		
+		if (cityClicked) {
+			addPopup();
+		}
 	}
 	
 	
@@ -207,6 +212,8 @@ public class EarthquakeCityMap extends PApplet {
 			
 		}
 		else {
+			cityClicked = false;
+			
 			lastClicked = null;
 			unhideMarkers();
 			
@@ -224,6 +231,9 @@ public class EarthquakeCityMap extends PApplet {
 	private void selectMarkersInThreatRadius() {
 		if (!(lastClicked == null)) {
 			if (lastClicked.getClass() == CityMarker.class) {
+				
+				cityClicked = true;
+				
 				for (Marker m : quakeMarkers) {
 					if (m.getDistanceTo(lastClicked.getLocation()) <=
 							((EarthquakeMarker)m).threatCircle()) {
@@ -268,6 +278,100 @@ public class EarthquakeCityMap extends PApplet {
 		for(Marker marker : cityMarkers) {
 			marker.setHidden(false);
 		}
+	}
+	
+	private void addPopup() {
+		
+		pushStyle();
+		
+		int xbase = 25;
+		int ybase = 350;
+		
+		fill(255, 250, 240);
+		
+		rect(xbase, ybase, 150, 300);
+		
+		CityMarker lastClickedEq = (CityMarker) lastClicked;
+		int numNear = 0;
+		float aveMag = 0;
+		EarthquakeMarker mostRecent = null;
+		float sumMag = 0;
+		EarthquakeMarker n;
+		for (Marker m : quakeMarkers) {
+			n = (EarthquakeMarker) m;
+			if (lastClickedEq.getDistanceTo(n.getLocation()) <=
+					(n.threatCircle())) {
+				if (mostRecent == null) {
+					mostRecent = n;
+				}
+				numNear++;
+				sumMag += n.getMagnitude();
+				if (compAge(mostRecent,n)>0) {
+					mostRecent = n;
+				}
+			}
+		}
+		if (numNear > 0) {
+			aveMag = sumMag/numNear;
+		}
+		
+		fill(0,0,0);
+		
+		text(((CityMarker) lastClicked).getStringProperty("name") +
+				", " + ((CityMarker) lastClicked).getStringProperty("country"),
+				xbase+5,ybase+25);
+		text(numNear + " Nearby Earthquake(s)",xbase+5,ybase+50);
+		text("Ave. Magnitude:",xbase+5,ybase+70);
+		text(aveMag,xbase+5,ybase+90);
+		if (mostRecent == null) {
+			text("Most Recent: None",xbase+5,ybase+110);
+		}
+		else {
+			text("Most Recent:",xbase+5,ybase+110);
+			text("Magnitude: "+mostRecent.getMagnitude(),xbase+10,ybase+130);
+			text("Location:",xbase+10,ybase+150);
+			text((mostRecent.getLocation()).toString(),xbase+15,ybase+170);
+			text("Depth: "+mostRecent.getDepth(),xbase+10,ybase+190);
+			text("On Land? "+mostRecent.isOnLand,xbase+10,ybase+210);
+		}
+		
+		popStyle();
+		
+	}
+	
+	private int compAge(EarthquakeMarker quake1, EarthquakeMarker quake2) {
+		int lessThan;
+		String age1 = quake1.getStringProperty("age");
+		String age2 = quake2.getStringProperty("age");
+		int ageNum1 = stringAgeToInt(age1);
+		int ageNum2 = stringAgeToInt(age2);
+		if (ageNum1 > ageNum2) {
+			lessThan = 1;
+		}
+		else if (ageNum1 < ageNum2) {
+			lessThan = -1;
+		}
+		else {
+			lessThan = 0;
+		}
+		return lessThan;
+	}
+	
+	private int stringAgeToInt(String age) {
+		int numAge = 24*7*52;
+		if (age.equals("Past Hour")) {
+			numAge = 1;
+		}
+		else if (age.equals("Past Day")) {
+			numAge = 24;
+		}
+		else if (age.equals("Past Week")) {
+			numAge = 24*7;
+		}
+		else if (age.equals("Past Month")) {
+			numAge = 24*30;
+		}
+		return numAge;
 	}
 	
 	// helper method to draw key in GUI
